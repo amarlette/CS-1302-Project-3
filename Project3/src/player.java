@@ -6,7 +6,8 @@ import java.util.ArrayList;
  * Created by alexa on 4/16/2017.
  */
 public class player {
-    private ArrayList<Image> pcards = new ArrayList<Image>();
+    private ArrayList<Image> pcards = new ArrayList<>();
+    public ArrayList<Image> pwon = new ArrayList<>(); //Storage for card won by the player
 
     public player(ArrayList<Image> pcards) {
         this.pcards = pcards;

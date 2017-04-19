@@ -7,7 +7,7 @@ import java.util.Map;
  * Created by alexa on 4/16/2017.
  */
 public class card {
-    private ArrayList<Image> cards = new ArrayList<Image>();
+    private ArrayList<Image> cards = new ArrayList<>();
 
     public card() {
 
