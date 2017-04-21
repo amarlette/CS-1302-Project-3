@@ -10,7 +10,7 @@ public class card {
     private ArrayList<Image> cards = new ArrayList<>();
 
     public card() {
-
+        getcards();
     }
 
     //Get the full deck array
@@ -28,7 +28,7 @@ public class card {
     //Takes in the player's or computer's hand and deals 4 new cards to each.
     public ArrayList<Image> deal(){
         ArrayList<Image> deal = new ArrayList<Image>();
-        for(int i = 1; i < 4; i++){
+        for(int i = 0; i < 4; i++){
             int rnum = rnum();
             cards.remove(rnum);
             deal.add(new Image("img/cards/" + rnum + ".png"));
