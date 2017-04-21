@@ -6,21 +6,21 @@ import java.util.ArrayList;
  * Created by alexa on 4/16/2017.
  */
 public class player {
-    private ArrayList<Image> pcards = new ArrayList<>();
-    public ArrayList<Image> pwon = new ArrayList<>(); //Storage for card won by the player
+    private ArrayList<cards> pcards = new ArrayList<>();
+    public ArrayList<cards> pwon = new ArrayList<>(); //Storage for card won by the player
 
-    public player(ArrayList<Image> pcards) {
+    public player(ArrayList<cards> pcards) {
         this.pcards = pcards;
     }
 
     //Gives the player a new hand of cards
-    public ArrayList<Image> getPcards() {
+    public ArrayList<cards> getPcards() {
         card card = new card();
         pcards = card.deal();
         return pcards;
     }
 
-    public void setPcards(ArrayList<Image> pcards) {
+    public void setPcards(ArrayList<cards> pcards) {
         this.pcards = pcards;
     }
 }
