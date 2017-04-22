@@ -12,8 +12,6 @@ public class deck {
     }
 
     public ArrayList<cards> getDeck() {
-        card card = new card();
-        deck = card.deal();
         return deck;
     }
 
@@ -22,7 +20,5 @@ public class deck {
     }
 
     //Adds the card that was laid on the top of the deck
-    public void addToDeck(int i, Image img){
-        deck.add(img);
-    }
+
 }

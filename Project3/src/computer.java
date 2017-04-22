@@ -15,8 +15,6 @@ public class computer {
 
     //Gives the computer a new hand of cards
     public ArrayList<cards> getCcards() {
-        card card = new card();
-        ccards = card.deal();
         return ccards;
     }
 

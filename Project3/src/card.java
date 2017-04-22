@@ -10,26 +10,24 @@ public class card {
     private ArrayList<cards> cards = new ArrayList<>();
 
     public card() {
-        getcards();
-    }
-
-
-    //Get the full deck array1
-    public ArrayList<cards> getcards() {
         for(int i = 1; i <= 52; i++){
             cards.add(new cards(i, new Image("img/cards/" + i + ".png")));
         }
-        return cards;
     }
 
 
+    //Get the full deck array
+    public ArrayList<cards> getCards() {
+        return cards;
+    }
+
     //Takes in the player's or computer's hand and deals 4 new cards to each.
     public ArrayList<cards> deal(){
-        ArrayList<cards> deal = new ArrayList<cards>();
+        ArrayList<cards> deal = new ArrayList<>();
         for(int i = 0; i < 4; i++){
             int rnum = rnum();
+            deal.add(cards.get(rnum));
             cards.remove(rnum);
-            deal.add(new cards(i, new Image("img/cards/" + rnum + ".png")));
         }
         return deal;
     }
