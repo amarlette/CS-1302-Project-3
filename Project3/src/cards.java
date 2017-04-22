@@ -1,7 +1,7 @@
 import javafx.scene.image.Image;
 
 /**
- * Created by alexa on 4/21/2017.
+ * Created by Alex, Sarah and Tessa on 4/21/2017.
  */
 public class cards {
     private int rank;

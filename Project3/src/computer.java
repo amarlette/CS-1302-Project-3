@@ -1,25 +1,26 @@
-import javafx.scene.image.Image;
-
 import java.util.ArrayList;
 
 /**
- * Created by alexa on 4/16/2017.
+ * Created by Alex, Sarah and Tessa on 4/16/2017.
  */
 public class computer {
+    //Create arrays for cards in computer's hand and won pile
     private ArrayList<cards> ccards = new ArrayList<>();
     public ArrayList<cards> cwon = new ArrayList<>();
 
+    //Constructor for cards in computer's hand
     public computer(ArrayList<cards> ccards) {
         this.ccards = ccards;
     }
 
-    //Gives the computer a new hand of cards
-    public ArrayList<cards> getCcards() {
-        return ccards;
-    }
+    //Gets the cards in the computer's hand
+    public ArrayList<cards> getCcards() {  return ccards;  }
 
+    //Sets new cards in the computer's hand
     public void setCcards(ArrayList<cards> ccards) {
         this.ccards = ccards;
     }
 
+    //Gets the cards in the computer's won pile
+    public ArrayList<cards> getCwon() {  return cwon;  }
 }
