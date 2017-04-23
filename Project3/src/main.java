@@ -42,6 +42,11 @@ public class main extends Application{
     ImageView ivB6 = new ImageView(new Image("img/blank.png"));
     ImageView ivB7 = new ImageView(new Image("img/blank.png"));
     ImageView ivB8 = new ImageView(new Image("img/blank.png"));
+    ImageView ivB9 = new ImageView(new Image("img/blank.png"));
+
+    //Creates and image for the back of the cards
+    private Image back = new Image("img/back.png");
+
 
     //Deals cards to computer, player and deck (where cards will be played)
     private computer comp = new computer(card.deal());
@@ -49,15 +54,31 @@ public class main extends Application{
     deck deck = new deck(card.deal());
 
     //Creates variables for referencing the cards in the deck, player and computer's hands
-    ArrayList<cards> playerhand = player.getPcards();
-    ArrayList<cards> comphand = comp.getCcards();
-    ArrayList<cards> pile = deck.getDeck();
+    private ArrayList<cards> playerhand = player.getPcards();
+    private ArrayList<cards> comphand = comp.getCcards();
+    private ArrayList<cards> pile = deck.getDeck();
+
+    private int cpisti = 0;
+    private int ppisti = 0;
 
     @Override
     public void start(Stage primaryStage) {
-        //Creates and image for the back of the cards
-        Image back = new Image("img/back.png");
+        //Checks to see if first card on the pile is Jack
+        if (pile.get(3).getRank()%13 == 11){
+            for(int i=0; i < 4; i++){
+                card.getCards().add(pile.get(i));
+                card.getCards().add(comphand.get(i));
+                card.getCards().add(playerhand.get(i));
+            }
+            pile.removeAll(pile);
+            playerhand.removeAll(playerhand);
+            comphand.removeAll(comphand);
+            pile = card.deal();
+            comphand = card.deal();
+            playerhand = card.deal();
 
+
+        }
         //Prints out the cards in the computer's hand
         System.out.print(comphand);
 
@@ -95,20 +116,23 @@ public class main extends Application{
     }
 
     //Creates a variable to keep track of turns
-    private int turn = 0;
+    int turn = 0;
     //Method for if the player chooses the first card to be played
     public void play1() {
         pile.add(playerhand.get(0));
         hBox2.getChildren().set(0, new ImageView(playerhand.get(0).getImg()));
         hBox4.getChildren().remove(btP1);
         hBox3.getChildren().set(0, ivB1);
-        System.out.print(playerhand.size());
+        pisti(pile);
         turn++;
-        if (turn == 8) {
+        if (turn%8 == 0 && turn < 48) {
             playerhand = card.deal();
             comphand = card.deal();
-            turn = 0;
         }
+        else if(turn == 48){
+            score score = new score(player.pwon, comp.cwon, ppisti, cpisti);
+            hBox2.getChildren().remove(1);
+            hBox2.getChildren().remove(0);        }
     }
 
     //Method for if the player chooses the second card to be played
@@ -117,13 +141,16 @@ public class main extends Application{
         hBox2.getChildren().set(0, new ImageView(playerhand.get(1).getImg()));
         hBox4.getChildren().remove(btP2);
         hBox3.getChildren().set(1, ivB2);
-        System.out.print(playerhand.size());
+        pisti(pile);
         turn++;
-        if (turn == 8) {
+        if (turn%8 == 0 && turn < 48) {
             playerhand = card.deal();
             comphand = card.deal();
-            turn = 0;
         }
+        else if(turn == 48){
+            score score = new score(player.pwon, comp.cwon, ppisti, cpisti);
+            hBox2.getChildren().remove(1);
+            hBox2.getChildren().remove(0);        }
     }
 
     //Method for if the player chooses the third card to be played
@@ -132,12 +159,16 @@ public class main extends Application{
         hBox2.getChildren().set(0, new ImageView(playerhand.get(2).getImg()));
         hBox4.getChildren().remove(btP3);
         hBox3.getChildren().set(2, ivB3);
-        System.out.print(playerhand.size());
+        pisti(pile);
         turn++;
-        if (turn == 8) {
+        if (turn%8 == 0 && turn < 48) {
             playerhand = card.deal();
             comphand = card.deal();
-            turn = 0;
+        }
+        else if(turn == 48){
+            score score = new score(player.pwon, comp.cwon, ppisti, cpisti);
+            hBox2.getChildren().remove(1);
+            hBox2.getChildren().remove(0);
         }
     }
 
@@ -147,12 +178,16 @@ public class main extends Application{
         hBox2.getChildren().set(0, new ImageView(playerhand.get(3).getImg()));
         hBox4.getChildren().remove(btP4);
         hBox3.getChildren().set(3, ivB4);
-        System.out.print(playerhand.size());
+        pisti(pile);
         turn++;
-        if (turn == 8) {
+        if (turn%8 == 0 && turn < 48) {
             playerhand = card.deal();
             comphand = card.deal();
-            turn = 0;
+        }
+        else if(turn == 48){
+            score score = new score(player.pwon, comp.cwon, ppisti, cpisti);
+            hBox2.getChildren().remove(1);
+            hBox2.getChildren().remove(0);
         }
     }
 
@@ -179,27 +214,88 @@ public class main extends Application{
                 break;
             }
         }
+        pisti(pile);
         rnum++;
         turn++;
 
         //Deals four more cards to each player if that round is finished
-        if (turn == 8) {
+        if (turn%8 == 0 && turn < 48) {
             playerhand = card.deal();
             comphand = card.deal();
             visdeal();
-            turn = 0;
             rnum = 0;
         }
+        else if(turn == 48){
+            score score = new score(player.pwon, comp.cwon, ppisti, cpisti);
+            hBox2.getChildren().remove(1);
+            hBox2.getChildren().remove(0);        }
     }
 
     //Visually places the newly dealt cards on the screen
     public void visdeal(){
         for(int i = 0; i < 4; i++) {
-            hBox1.getChildren().set(i, new ImageView(comphand.get(i).getImg()));
+            hBox1.getChildren().set(i, new ImageView(back));
             hBox3.getChildren().set(i, new ImageView(playerhand.get(i).getImg()));
         }
         hBox4.getChildren().addAll(btP1, btP2, btP3, btP4);
         System.out.print(card.getCards().size());
+    }
+
+    int lastCapture = 0;
+    public void pisti(ArrayList<cards> pile){
+        if(pile.size() > 1 && turn >= 2) {
+            if(pile.get(pile.size() - 1).getRank() % 13 == 11){
+                if(pile.get(pile.size() - 2).getRank() % 13 == 11){
+                    if (turn % 2 != 0) {
+                        cpisti += 20;
+                        lastCapture = 0;
+                    }
+                    else if(turn % 2 == 0) {
+                        ppisti += 20;
+                        lastCapture = 1;
+                    }
+                }
+                if (turn % 2 != 0) {
+                    for (int i = 0; i < pile.size(); i++) {
+                        comp.getCwon().add(pile.get(i));
+                    }
+                    pile.removeAll(pile);
+                    lastCapture = 0;
+                    System.out.println("Cards added to C Pile" + comp.getCwon().size());
+                } else if (turn % 2 == 0) {
+                    for (int i = 0; i < pile.size(); i++) {
+                        player.getPwon().add(pile.get(i));
+                    }
+                    pile.removeAll(pile);
+                    lastCapture = 1;
+                    System.out.println("Cards added to P Pile" + player.getPwon().size());
+                }
+                hBox2.getChildren().set(0, ivB9);
+            }
+            else if (pile.get(pile.size() - 1).getRank() % 13 == pile.get(pile.size() - 2).getRank() % 13) {
+                if (turn % 2 != 0) {
+                    for (int i = 0; i < pile.size(); i++) {
+                        comp.getCwon().add(pile.get(i));
+                    }
+                    pile.removeAll(pile);
+                    cpisti += 10;
+                    lastCapture = 0;
+                    System.out.println("Cards added to C Pile" + comp.getCwon().size());
+
+                } else if (turn % 2 == 0) {
+                    for (int i = 0; i < pile.size(); i++) {
+                        player.getPwon().add(pile.get(i));
+                    }
+                    pile.removeAll(pile);
+                    ppisti += 10;
+                    lastCapture = 1;
+                    System.out.println("Cards added to P Pile" + player.getPwon().size());
+
+                }
+                hBox2.getChildren().set(0, ivB9);
+
+            }
+        }
     }
 
     public static void main(String[] args) {
