@@ -16,11 +16,6 @@ public class computer {
     //Gets the cards in the computer's hand
     public ArrayList<cards> getCcards() {  return ccards;  }
 
-    //Sets new cards in the computer's hand
-    public void setCcards(ArrayList<cards> ccards) {
-        this.ccards = ccards;
-    }
-
     //Gets the cards in the computer's won pile
     public ArrayList<cards> getCwon() {  return cwon;  }
 }

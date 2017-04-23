@@ -16,11 +16,6 @@ public class player {
     //Gets the cards in the player's hand
     public ArrayList<cards> getPcards() { return pcards;  }
 
-    //Sets new cards in the player's hand
-    public void setPcards(ArrayList<cards> pcards) {
-        this.pcards = pcards;
-    }
-
     //Gets the cards in the player's won pile
     public ArrayList<cards> getPwon() {  return pwon;  }
 }

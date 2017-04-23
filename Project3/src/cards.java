@@ -3,6 +3,7 @@ import javafx.scene.image.Image;
 /**
  * Created by Alex, Sarah and Tessa on 4/21/2017.
  */
+//Class for tracking and reading cards
 public class cards {
     private int rank;
     private Image img;
@@ -16,7 +17,5 @@ public class cards {
         return rank;
     }
 
-    public Image getImg() {
-        return img;
-    }
+    public Image getImg() { return img; }
 }

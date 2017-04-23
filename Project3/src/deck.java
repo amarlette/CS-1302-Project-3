@@ -14,9 +14,4 @@ public class deck {
 
     //Gets the cards in the deck
     public ArrayList<cards> getDeck() { return deck;  }
-
-    //Sets the deck with new cards
-    public void setDeck(ArrayList<cards> deck) {
-        this.deck = deck;
-    }
 }

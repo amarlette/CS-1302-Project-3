@@ -36,7 +36,6 @@ public class main extends Application{
     Button btP3 = new Button("Card 3");
     Button btP4 = new Button("Card 4");
     Button btEnd = new Button("End Turn");
-    Button btWinner = new Button("See who won!");
 
     //Creates a new deck of 52 cards
     private card card = new card();
@@ -53,6 +52,7 @@ public class main extends Application{
     ImageView ivB8 = new ImageView(new Image("img/blank.png"));
     ImageView ivB9 = new ImageView(new Image("img/blank.png"));
 
+    //Creates image for background when scores are shown
     ImageView ivTrophy = new ImageView(new Image("Trophy.png"));
 
     //Winning text
@@ -72,12 +72,13 @@ public class main extends Application{
     private ArrayList<cards> comphand = comp.getCcards();
     private ArrayList<cards> pile = deck.getDeck();
 
+    //Creates counters for keeping track of pistis
     private int cpisti = 0;
     private int ppisti = 0;
 
     @Override
     public void start(Stage primaryStage) {
-        //Checks to see if first card on the pile is Jack
+        //Checks to see if first card on the pile is Jack and if so redeals
         if (pile.get(3).getRank()%13 == 11){
             for(int i=0; i < 4; i++){
                 card.getCards().add(pile.get(i));
@@ -91,8 +92,6 @@ public class main extends Application{
             comphand = card.deal();
             playerhand = card.deal();
         }
-        //Prints out the cards in the computer's hand
-        System.out.print(comphand);
 
         //Places all cards (player and computer's hands and deck) and buttons in HBoxes
         hBox1.getChildren().addAll((new ImageView(back)), (new ImageView(back)), (new ImageView(back)), (new ImageView(back)));
@@ -122,8 +121,8 @@ public class main extends Application{
 
         //Creates a scene for the pane
         Scene scene = new Scene(pane);
-        primaryStage.setTitle("Card Game"); // Set the stage title
-        primaryStage.setScene(scene); // Place the scene in the stage
+        primaryStage.setTitle("Card Game");
+        primaryStage.setScene(scene);
         primaryStage.show();
     }
 
@@ -146,7 +145,6 @@ public class main extends Application{
             hBox2.getChildren().remove(1);
             hBox2.getChildren().remove(0);
             pane.getChildren().clear();
-            pane.getChildren().add(btWinner);
         }
     }
 
@@ -252,6 +250,7 @@ public class main extends Application{
             getWinner(pane);
         }
     }
+
     //Visually places the newly dealt cards on the screen
     public void visdeal(){
         for(int i = 0; i < 4; i++) {
@@ -259,11 +258,13 @@ public class main extends Application{
             hBox3.getChildren().set(i, new ImageView(playerhand.get(i).getImg()));
         }
         hBox4.getChildren().addAll(btP1, btP2, btP3, btP4);
-        System.out.print(card.getCards().size());
     }
+
+    //Variable to keep track of you had the last capture
     int lastCapture = 0;
+    //Method to keep track of pistis
     public void pisti(ArrayList<cards> pile){
-        if(pile.size() > 1 && turn >= 2) {
+        if(pile.size() > 1 && turn > 1) {
             if(pile.get(pile.size() - 1).getRank() % 13 == 11){
                 if(pile.get(pile.size() - 2).getRank() % 13 == 11){
                     if (turn % 2 != 0) {
@@ -281,17 +282,18 @@ public class main extends Application{
                     }
                     pile.removeAll(pile);
                     lastCapture = 0;
-                    System.out.println("Cards added to C Pile" + comp.getCwon().size());
-                } else if (turn % 2 == 0) {
+                }
+
+                else if (turn % 2 == 0) {
                     for (int i = 0; i < pile.size(); i++) {
                         player.getPwon().add(pile.get(i));
                     }
                     pile.removeAll(pile);
                     lastCapture = 1;
-                    System.out.println("Cards added to P Pile" + player.getPwon().size());
                 }
                 hBox2.getChildren().set(0, ivB9);
             }
+
             else if (pile.get(pile.size() - 1).getRank() % 13 == pile.get(pile.size() - 2).getRank() % 13) {
                 if (turn % 2 != 0) {
                     for (int i = 0; i < pile.size(); i++) {
@@ -300,22 +302,22 @@ public class main extends Application{
                     pile.removeAll(pile);
                     cpisti += 10;
                     lastCapture = 0;
-                    System.out.println("Cards added to C Pile" + comp.getCwon().size());
+                }
 
-                } else if (turn % 2 == 0) {
+                else if (turn % 2 == 0) {
                     for (int i = 0; i < pile.size(); i++) {
                         player.getPwon().add(pile.get(i));
                     }
                     pile.removeAll(pile);
                     ppisti += 10;
                     lastCapture = 1;
-                    System.out.println("Cards added to P Pile" + player.getPwon().size());
                 }
                 hBox2.getChildren().set(0, ivB9);
             }
         }
     }
-    //Play the animation
+
+    //Method for playing the animation at the end of the game
     public void getWinner (GridPane pane){
         score score = new score(player.pwon, comp.cwon, ppisti, cpisti);
 
@@ -339,13 +341,13 @@ public class main extends Application{
             }
             else {
                 if (score.getPscore() > score.getCscore())
-                    win.setText("You win!!");
+                    win.setText("  You win!!");
                 else if (score.getPscore() < score.getCscore()) {
-                    win.setText("You lose...");
+                    win.setText("  You lose...");
                     win.setFill(Color.RED);
                 }
             }
-            scores.setText("\n\n\nYour score: " + score.getPscore() + "\nComp's score: " + score.getCscore());
+            scores.setText("\n\n\n\n\tYour score: " + score.getPscore() + "\n\tComp's score: " + score.getCscore());
         };
         Timeline winTimer = new Timeline(
                 new KeyFrame(Duration.millis(500), winHandler));
@@ -353,6 +355,7 @@ public class main extends Application{
         winTimer.setDelay(Duration.seconds(2.0));
         winTimer.play();
     }
+
     public static void main(String[] args) {
         launch(args);
     }
