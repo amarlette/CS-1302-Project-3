@@ -1,4 +1,9 @@
+import javafx.animation.KeyFrame;
+import javafx.animation.PathTransition;
+import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -6,10 +11,13 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
+import javafx.util.Duration;
 import java.util.ArrayList;
 
 /**
@@ -28,6 +36,7 @@ public class main extends Application{
     Button btP3 = new Button("Card 3");
     Button btP4 = new Button("Card 4");
     Button btEnd = new Button("End Turn");
+    Button btWinner = new Button("See who won!");
 
     //Creates a new deck of 52 cards
     private card card = new card();
@@ -44,9 +53,14 @@ public class main extends Application{
     ImageView ivB8 = new ImageView(new Image("img/blank.png"));
     ImageView ivB9 = new ImageView(new Image("img/blank.png"));
 
+    ImageView ivTrophy = new ImageView(new Image("Trophy.png"));
+
+    //Winning text
+    Text win = new Text(0, 100," ");
+    Text scores = new Text(0, 400," ");
+
     //Creates and image for the back of the cards
     private Image back = new Image("img/back.png");
-
 
     //Deals cards to computer, player and deck (where cards will be played)
     private computer comp = new computer(card.deal());
@@ -76,8 +90,6 @@ public class main extends Application{
             pile = card.deal();
             comphand = card.deal();
             playerhand = card.deal();
-
-
         }
         //Prints out the cards in the computer's hand
         System.out.print(comphand);
@@ -132,7 +144,10 @@ public class main extends Application{
         else if(turn == 48){
             score score = new score(player.pwon, comp.cwon, ppisti, cpisti);
             hBox2.getChildren().remove(1);
-            hBox2.getChildren().remove(0);        }
+            hBox2.getChildren().remove(0);
+            pane.getChildren().clear();
+            pane.getChildren().add(btWinner);
+        }
     }
 
     //Method for if the player chooses the second card to be played
@@ -150,7 +165,9 @@ public class main extends Application{
         else if(turn == 48){
             score score = new score(player.pwon, comp.cwon, ppisti, cpisti);
             hBox2.getChildren().remove(1);
-            hBox2.getChildren().remove(0);        }
+            hBox2.getChildren().remove(0);
+            pane.getChildren().clear();
+        }
     }
 
     //Method for if the player chooses the third card to be played
@@ -169,6 +186,7 @@ public class main extends Application{
             score score = new score(player.pwon, comp.cwon, ppisti, cpisti);
             hBox2.getChildren().remove(1);
             hBox2.getChildren().remove(0);
+            pane.getChildren().clear();
         }
     }
 
@@ -188,6 +206,7 @@ public class main extends Application{
             score score = new score(player.pwon, comp.cwon, ppisti, cpisti);
             hBox2.getChildren().remove(1);
             hBox2.getChildren().remove(0);
+            pane.getChildren().clear();
         }
     }
 
@@ -228,9 +247,11 @@ public class main extends Application{
         else if(turn == 48){
             score score = new score(player.pwon, comp.cwon, ppisti, cpisti);
             hBox2.getChildren().remove(1);
-            hBox2.getChildren().remove(0);        }
+            hBox2.getChildren().remove(0);
+            pane.getChildren().clear();
+            getWinner(pane);
+        }
     }
-
     //Visually places the newly dealt cards on the screen
     public void visdeal(){
         for(int i = 0; i < 4; i++) {
@@ -240,7 +261,6 @@ public class main extends Application{
         hBox4.getChildren().addAll(btP1, btP2, btP3, btP4);
         System.out.print(card.getCards().size());
     }
-
     int lastCapture = 0;
     public void pisti(ArrayList<cards> pile){
         if(pile.size() > 1 && turn >= 2) {
@@ -290,14 +310,49 @@ public class main extends Application{
                     ppisti += 10;
                     lastCapture = 1;
                     System.out.println("Cards added to P Pile" + player.getPwon().size());
-
                 }
                 hBox2.getChildren().set(0, ivB9);
-
             }
         }
     }
+    //Play the animation
+    public void getWinner (GridPane pane){
+        score score = new score(player.pwon, comp.cwon, ppisti, cpisti);
 
+        pane.getChildren().add(ivTrophy);
+
+        PathTransition pt = new PathTransition(Duration.seconds(2.0),
+                new Line(170, 400, 170, 150), ivTrophy);
+        pt.setCycleCount(1);
+        pt.play();
+
+        win.setFill(Color.GOLD);
+        win.setFont(Font.font("Gill Sans Ultra Bold", 30));
+
+        scores.setFill(Color.GOLD);
+        scores.setFont(Font.font(20));
+        pane.getChildren().addAll(win, scores);
+
+        EventHandler<ActionEvent> winHandler = e -> {
+            if (win.getText().length() != 0) {
+                win.setText("");
+            }
+            else {
+                if (score.getPscore() > score.getCscore())
+                    win.setText("You win!!");
+                else if (score.getPscore() < score.getCscore()) {
+                    win.setText("You lose...");
+                    win.setFill(Color.RED);
+                }
+            }
+            scores.setText("\n\n\nYour score: " + score.getPscore() + "\nComp's score: " + score.getCscore());
+        };
+        Timeline winTimer = new Timeline(
+                new KeyFrame(Duration.millis(500), winHandler));
+        winTimer.setCycleCount(Timeline.INDEFINITE);
+        winTimer.setDelay(Duration.seconds(2.0));
+        winTimer.play();
+    }
     public static void main(String[] args) {
         launch(args);
     }

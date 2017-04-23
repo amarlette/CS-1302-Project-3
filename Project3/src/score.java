@@ -7,6 +7,14 @@ public class score {
     private int pscore = 0;
     private int cscore = 0;
 
+    public int getPscore() {
+        return pscore;
+    }
+
+    public int getCscore() {
+        return cscore;
+    }
+
     public score(ArrayList<cards> pwon, ArrayList<cards> cwon, int ppishti, int cpishti) {
         if(pwon.size() > cwon.size()){
             pscore+=3;
@@ -58,4 +66,12 @@ public class score {
             }
         }
     }
+
+//    public int getPscore() {
+//        return pscore;
+//    }
+//
+//    public int getCscore() {
+//        return cscore;
+//    }
 }
